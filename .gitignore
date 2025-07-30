@@ -484,3 +484,6 @@ $RECYCLE.BIN/
 *.swp
 API/appsettings.json
 API/studybuddy.db
+API/studybuddy.db-shm
+API/studybuddy.db-wal
+API/studybuddy.db-wal
