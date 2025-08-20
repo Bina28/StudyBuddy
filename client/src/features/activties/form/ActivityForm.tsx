@@ -8,6 +8,7 @@ export default function ActivityForm() {
   const { updateActivity, createActivity, activity, isLoadingActivity } =
     useActivities(id);
   const navigate = useNavigate();
+  
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
