@@ -22,7 +22,7 @@ public class CreateActivity
     {
       var activity = mapper.Map<Activity>(request.ActivityDto);
       context.Activities.Add(activity);
-      await context.SaveChangesAsync(cancellationToken);
+
 
       var result = await context.SaveChangesAsync(cancellationToken) > 0;
       if (!result) return Result<string>.Failure("Failed to create activity", 400);
