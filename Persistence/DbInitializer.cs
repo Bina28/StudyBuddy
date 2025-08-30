@@ -1,15 +1,32 @@
 using System;
 using Domain;
+using Microsoft.AspNetCore.Identity;
 
 namespace Persistence;
 
 public class DbInitializer
 {
-  public static async Task SeedData(AppDbContext context)
-  {
-    if (context.Activities.Any()) return;
+    public static async Task SeedData(AppDbContext context, UserManager<User> userManager)
+    {
+        if (!userManager.Users.Any())
+        {
+            var users = new List<User>
+{
+    new() {DisplayName="Bob", UserName="bob@gmail.com", Email="bob@gmail.com"},
+    new() {DisplayName="Tom", UserName="tom@gmail.com", Email="tom@gmail.com"},
+    new() {DisplayName="Jane", UserName="jane@gmail.com", Email="jane@gmail.com"}
+};
 
-  var activities = new List<Activity>
+            foreach (var user in users)
+            {
+                await userManager.CreateAsync(user, "Pa$$w0rd");
+            }
+
+        }
+
+        if (context.Activities.Any()) return;
+
+        var activities = new List<Activity>
 {
  new() {
     Title = "Math Exam Study Group",
@@ -135,7 +152,7 @@ new() {
 };
 
 
-    await context.Activities.AddRangeAsync(activities);
-    await context.SaveChangesAsync();
-  }
+        await context.Activities.AddRangeAsync(activities);
+        await context.SaveChangesAsync();
+    }
 }
