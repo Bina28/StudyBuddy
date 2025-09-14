@@ -9,6 +9,9 @@ using Domain;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Application.Interfaces;
+using Infrastructure;
+using Infrastructure.Security;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,9 +19,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers(opt =>
 {
-     var policy = new AuthorizationPolicyBuilder()
-        .RequireAuthenticatedUser()   
-        .Build();
+  var policy = new AuthorizationPolicyBuilder()
+     .RequireAuthenticatedUser()
+     .Build();
   opt.Filters.Add(new AuthorizeFilter(policy));
 });
 builder.Services.AddDbContext<AppDbContext>(opt =>
@@ -31,7 +34,7 @@ builder.Services.AddMediatR(x =>
   x.RegisterServicesFromAssemblyContaining<GetActivityList.Handler>();
   x.AddOpenBehavior(typeof(ValidationBehavior<,>));
 });
-
+builder.Services.AddScoped<IUserAccessor, UserAccessor>();
 builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
 builder.Services.AddValidatorsFromAssemblyContaining<CreateActivityValidator>();
 builder.Services.AddTransient<ExeptionMiddleware>();
@@ -41,7 +44,16 @@ builder.Services.AddIdentityApiEndpoints<User>(opt =>
 })
 .AddRoles<IdentityRole>()
 .AddEntityFrameworkStores<AppDbContext>();
+builder.Services.AddAuthorization(opt =>
+{
 
+  opt.AddPolicy("IsActivityHost", policy =>
+  {
+    policy.Requirements.Add(new IsHostRequirement());
+  });
+
+});
+builder.Services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>();
 var app = builder.Build();
 
 //Cofigure the HTTP  request pipeline.
@@ -59,7 +71,8 @@ app.MapGroup("api").MapIdentityApi<User>();
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;
 try
-{  var context = services.GetRequiredService<AppDbContext>();
+{
+  var context = services.GetRequiredService<AppDbContext>();
   var userManager = services.GetRequiredService<UserManager<User>>();
   await context.Database.MigrateAsync();
   await DbInitializer.SeedData(context, userManager);
