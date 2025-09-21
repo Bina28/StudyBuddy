@@ -31,7 +31,13 @@ export default function ActivityCard({ activity }: Props) {
     <Card elevation={3} sx={{ borderRadius: 3 }}>
       <Box display="flex" alignItems="center" justifyContent="space-between">
         <CardHeader
-          avatar={<Avatar sx={{ height: 80, width: 80 }} />}
+          avatar={
+            <Avatar
+              src={activity.hostImageUrl}
+              sx={{ height: 80, width: 80 }}
+              alt="image of host"
+            />
+          }
           title={activity.title}
           slotProps={{
             title: {
@@ -49,7 +55,12 @@ export default function ActivityCard({ activity }: Props) {
         />
         <Box display="flex" flexDirection="column" gap={2} mr={2}>
           {(activity.isHost || activity.isGoing) && (
-            <Chip variant="outlined" label={label} color={color} sx={{ borderRadius: 2 }} />
+            <Chip
+              variant="outlined"
+              label={label}
+              color={color}
+              sx={{ borderRadius: 2 }}
+            />
           )}
           {activity.isCancelled && (
             <Chip
@@ -80,7 +91,7 @@ export default function ActivityCard({ activity }: Props) {
           sx={{ backgroundColor: "grey.200", py: 3, pl: 3 }}
         >
           {activity.attendees.map((att) => (
-            <AvatarPopover profile={att} key={att.id}/>
+            <AvatarPopover profile={att} key={att.id} />
           ))}
         </Box>
       </CardContent>
