@@ -37,6 +37,15 @@ type User = {
   imageUrl?: string;
 };
 
+type ChatComment = {
+  id: string;
+  createdAt: Date;
+  body: string;
+  userId: sting;
+  displayName: string;
+  imageUrl?: string;
+};
+
 type LocationIQSuggestion = {
   place_id: string;
   licence: string;
