@@ -1,3 +1,8 @@
+type PageList<T, TCursor> = {
+  items: T[];
+  nextCursor: TCursor;
+};
+
 type Activity = {
   id: string;
   title: string;
@@ -15,7 +20,7 @@ type Activity = {
   isHost: boolean;
   hostId: string;
   hostDisplayName: string;
-  hostImageUrl: string;
+  hostImageUrl?: string;
 };
 
 type Profile = {
@@ -25,7 +30,7 @@ type Profile = {
   imageUrl?: string;
   followersCount?: number;
   followingCount?: number;
-  following: boolean;
+  following?: boolean;
 };
 
 type Photo = {

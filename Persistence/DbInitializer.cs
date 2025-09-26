@@ -108,7 +108,94 @@ public class DbInitializer
         [
             new() { UserId = users[1].Id, IsHost = true }
         ]
+    },
+        new()
+    {
+        Title = "Hackathon Weekend",
+        Date = DateTime.Now.AddMonths(4),
+        Description = "Studenter samles for en helg med koding og kreativ problemløsning",
+        Category = "programmingGroup",
+        City = "Oslo",
+        LocationName = "StartupLab, Oslo Science Park",
+        Latitude = 59.9420,
+        Longitude = 10.7140,
+        University = "Universitetet i Oslo",
+        Attendees =
+        [
+            new() { UserId = users[0].Id, IsHost = true },
+            new() { UserId = users[1].Id },
+            new() { UserId = users[2].Id }
+        ]
+    },
+    new()
+    {
+        Title = "Matte-quiz kveld",
+        Date = DateTime.Now.AddDays(20),
+        Description = "Morsom quiz med matteoppgaver og premier",
+        Category = "mathGroup",
+        City = "Bergen",
+        LocationName = "Universitetet i Bergen, Matematisk Institutt",
+        Latitude = 60.3880,
+        Longitude = 5.3300,
+        University = "Universitetet i Bergen",
+        Attendees =
+        [
+            new() { UserId = users[2].Id, IsHost = true },
+            new() { UserId = users[1].Id }
+        ]
+    },
+    new()
+    {
+        Title = "Internasjonal språk-kafé",
+        Date = DateTime.Now.AddMonths(-3),
+        Description = "Snakk forskjellige språk og møt internasjonale studenter",
+        Category = "language",
+        City = "Trondheim",
+        LocationName = "Sit Café, Trondheim",
+        Latitude = 63.4200,
+        Longitude = 10.3950,
+        University = "NTNU",
+        Attendees =
+        [
+            new() { UserId = users[0].Id, IsHost = true },
+            new() { UserId = users[1].Id }
+        ]
+    },
+    new()
+    {
+        Title = "Case-oppgaveløsning",
+        Date = DateTime.Now.AddMonths(5),
+        Description = "Gruppemøte for å jobbe med caser til eksamen",
+        Category = "subjectGroup",
+        City = "Oslo",
+        LocationName = "Handelshøyskolen BI, Oslo",
+        Latitude = 59.9180,
+        Longitude = 10.7290,
+        University = "BI Norwegian Business School",
+        Attendees =
+        [
+            new() { UserId = users[1].Id, IsHost = true },
+            new() { UserId = users[2].Id }
+        ]
+    },
+    new()
+    {
+        Title = "Kaffe og fagprat",
+        Date = DateTime.Now.AddDays(-15),
+        Description = "Uformelt møte med kaffe og fagdiskusjon",
+        Category = "cafeMeeting",
+        City = "Stavanger",
+        LocationName = "Universitetet i Stavanger, Biblioteket",
+        Latitude = 58.9690,
+        Longitude = 5.7350,
+        University = "Universitetet i Stavanger",
+        Attendees =
+        [
+            new() { UserId = users[2].Id, IsHost = true },
+            new() { UserId = users[0].Id }
+        ]
     }
+
 };
 
         await context.Activities.AddRangeAsync(activities);

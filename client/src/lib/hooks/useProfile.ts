@@ -1,9 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import agent from "../api/agent";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 
 export const useProfile = (id?: string, predicate?: string) => {
-  const queryClinet = useQueryClient();
+  const queryClient = useQueryClient();
+  const [filter, setFilter] = useState<string | null>(null);
 
   const { data: profile, isLoading: loadingProfile } = useQuery<Profile>({
     queryKey: ["profile", id],
@@ -36,6 +37,22 @@ export const useProfile = (id?: string, predicate?: string) => {
     enabled: !!id && !!predicate,
   });
 
+  const { data: userActivities, isLoading: loadingUserActivities } = useQuery({
+    queryKey: ["user-activities", filter],
+    queryFn: async () => {
+      const response = await agent.get<Activity[]>(
+        `/profiles/${id}/activities`,
+        {
+          params: {
+            filter,
+          },
+        }
+      );
+      return response.data;
+    },
+    enabled: !!id && !!filter,
+  });
+
   const uploadPhoto = useMutation({
     mutationFn: async (file: Blob) => {
       const formData = new FormData();
@@ -46,17 +63,17 @@ export const useProfile = (id?: string, predicate?: string) => {
       return response.data;
     },
     onSuccess: async (photo: Photo) => {
-      await queryClinet.invalidateQueries({
+      await queryClient.invalidateQueries({
         queryKey: ["photo", id],
       });
-      queryClinet.setQueryData(["user"], (data: User) => {
+      queryClient.setQueryData(["user"], (data: User) => {
         if (!data) return data;
         return {
           ...data,
           imageUrl: data.imageUrl ?? photo.url,
         };
       });
-      queryClinet.setQueryData(["profile", id], (data: Profile) => {
+      queryClient.setQueryData(["profile", id], (data: Profile) => {
         if (!data) return data;
         return {
           ...data,
@@ -71,7 +88,7 @@ export const useProfile = (id?: string, predicate?: string) => {
       await agent.put(`/profiles/${photo.id}/setMain`);
     },
     onSuccess: (_, photo) => {
-      queryClinet.setQueryData<User>(["user"], (userData) => {
+      queryClient.setQueryData<User>(["user"], (userData) => {
         if (!userData) return userData;
         return {
           ...userData,
@@ -79,7 +96,7 @@ export const useProfile = (id?: string, predicate?: string) => {
         };
       });
 
-      queryClinet.setQueryData<Profile>(["profile", id], (profileData) => {
+      queryClient.setQueryData<Profile>(["profile", id], (profileData) => {
         if (!profileData) return profileData;
         return {
           ...profileData,
@@ -94,7 +111,7 @@ export const useProfile = (id?: string, predicate?: string) => {
       await agent.delete(`/profiles/${photoId}/photos`);
     },
     onSuccess: (_, photoId) => {
-      queryClinet.setQueryData(["photos", id], (photos: Photo[]) => {
+      queryClient.setQueryData(["photos", id], (photos: Photo[]) => {
         return photos.filter((x) => x.id !== photoId);
       });
     },
@@ -105,8 +122,8 @@ export const useProfile = (id?: string, predicate?: string) => {
       await agent.post(`/profiles/${id}/follow`);
     },
     onSuccess: () => {
-      queryClinet.setQueryData(["profile", id], (profile: Profile) => {
-        queryClinet.invalidateQueries({
+      queryClient.setQueryData(["profile", id], (profile: Profile) => {
+        queryClient.invalidateQueries({
           queryKey: ["followings", id, "followers"],
         });
         if (!profile || profile.followersCount === undefined) return profile;
@@ -122,8 +139,8 @@ export const useProfile = (id?: string, predicate?: string) => {
   });
 
   const isCurrentUser = useMemo(() => {
-    return id === queryClinet.getQueryData<User>(["user"])?.id;
-  }, [id, queryClinet]);
+    return id === queryClient.getQueryData<User>(["user"])?.id;
+  }, [id, queryClient]);
 
   return {
     profile,
@@ -137,5 +154,9 @@ export const useProfile = (id?: string, predicate?: string) => {
     updateFollowing,
     followings,
     loadingFollowings,
+    userActivities,
+    loadingUserActivities,
+    setFilter,
+    filter
   };
 };
