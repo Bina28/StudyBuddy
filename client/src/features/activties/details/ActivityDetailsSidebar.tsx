@@ -9,14 +9,13 @@ import {
   ListItemText,
   Chip,
 } from "@mui/material";
+import { Link } from "react-router";
 
 type Props = {
   activity: Activity;
 };
 
 export default function ActivityDetailsSidebar({ activity }: Props) {
-  
-
   return (
     <>
       <Paper
@@ -37,22 +36,22 @@ export default function ActivityDetailsSidebar({ activity }: Props) {
           <Grid2 key={attende.id} container alignItems="center">
             <Grid2 size={8}>
               <List sx={{ display: "flex", flexDirection: "column" }}>
-                <ListItem>
+                <ListItem component={Link} to={`/profiles/${attende.id}`}>
                   <ListItemAvatar>
                     <Avatar
-                    variant="rounded"
+                      variant="rounded"
                       alt={attende.displayName + " name"}
                       src={attende.imageUrl}
-                      sx={{width:75, height:75, mr:3}}
+                      sx={{ width: 75, height: 75, mr: 3 }}
                     />
                   </ListItemAvatar>
                   <ListItemText>
                     <Typography variant="h6">{attende.displayName}</Typography>
-                            {attende.following && (
-                <Typography variant="body2" color="orange">
-                  Following
-                </Typography>
-              )}
+                    {attende.following && (
+                      <Typography variant="body2" color="orange">
+                        Following
+                      </Typography>
+                    )}
                   </ListItemText>
                 </ListItem>
               </List>
@@ -66,7 +65,7 @@ export default function ActivityDetailsSidebar({ activity }: Props) {
                 gap: 1,
               }}
             >
-              {activity.hostId===attende.id && (
+              {activity.hostId === attende.id && (
                 <Chip
                   label="Host"
                   color="warning"
@@ -74,7 +73,6 @@ export default function ActivityDetailsSidebar({ activity }: Props) {
                   sx={{ borderRadius: 2 }}
                 />
               )}
-      
             </Grid2>
           </Grid2>
         ))}

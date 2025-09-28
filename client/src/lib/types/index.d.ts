@@ -6,7 +6,7 @@ type PageList<T, TCursor> = {
 type Activity = {
   id: string;
   title: string;
-  date: string;
+  date: Date;
   description: string;
   category: string;
   isCancelled: boolean;

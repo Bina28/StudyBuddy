@@ -4,7 +4,7 @@ import {
   type UseControllerProps,
   useController,
 } from "react-hook-form";
-import type { LocationIQSuggestion } from "../../../lib/types";
+
 import {
   Box,
   debounce,
