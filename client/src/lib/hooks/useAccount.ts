@@ -1,14 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { LoginSchema } from "../schemas/loginSchema";
 import agent from "../api/agent";
-import {  useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import type { RegisterSchema } from "../schemas/registerSchema";
 import { toast } from "react-toastify";
 
 export const useAccount = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-
 
   const loginUser = useMutation({
     mutationFn: async (creds: LoginSchema) => {
@@ -25,10 +24,6 @@ export const useAccount = () => {
     mutationFn: async (creds: RegisterSchema) => {
       await agent.post("account/register", creds);
     },
-    onSuccess: () => {
-      toast.success("Register successful - you can now login");
-      navigate("/login");
-    },
   });
 
   const logoutUser = useMutation({
@@ -42,20 +37,45 @@ export const useAccount = () => {
     },
   });
 
+  const vertifyEmail = useMutation({
+    mutationFn: async ({ userId, code }: { userId: string; code: string }) => {
+      await agent.get(`/confirmEmail?userId=${userId}&code=${code}`);
+    },
+  });
+
+  const resendConfiramtionEmail = useMutation({
+    mutationFn: async ({
+      email,
+      userId,
+    }: {
+      email?: string;
+      userId?: string | null;
+    }) => {
+      await agent.get(`/account/resendConfirmEmail?email=${email}`, {
+        params: { email, userId },
+      });
+    },
+    onSuccess: () => {
+      toast.success("Email sent  - please check your email");
+    },
+  });
+
   const { data: currentUser, isLoading: loadingUserInfo } = useQuery({
     queryKey: ["user"],
     queryFn: async () => {
       const response = await agent.get<User>("account/user-info");
       return response.data;
     },
-    enabled:
-      !queryClient.getQueryData(["user"]) 
+    enabled: !queryClient.getQueryData(["user"]),
   });
+
   return {
     loginUser,
     currentUser,
     logoutUser,
     loadingUserInfo,
     registerUser,
+    vertifyEmail,
+    resendConfiramtionEmail,
   };
 };

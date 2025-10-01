@@ -3,6 +3,7 @@ import { store } from "../stores/store";
 import { toast } from "react-toastify";
 import { router } from "../../app/router/Routes";
 
+
 const sleep = (delay: number) => {
   return new Promise((resolve) => {
     setTimeout(resolve, delay);
@@ -46,7 +47,12 @@ agent.interceptors.response.use(
         }
         break;
       case 401:
-        toast.error("Unauthorized");
+        if (data.detail === "NotAllowed") {
+          throw new Error(data.detail);
+        } else {
+          toast.error("Unauthorized");
+        }
+
         break;
       case 404:
         router.navigate("/not-found");
