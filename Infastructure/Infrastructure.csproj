@@ -15,7 +15,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Email\EmailSender.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="CloudinaryDotNet" Version="1.27.7" />
+    <PackageReference Include="Resend" Version="0.0.13" />
   </ItemGroup>
 
 </Project>
