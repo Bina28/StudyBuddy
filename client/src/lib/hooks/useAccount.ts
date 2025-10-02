@@ -4,6 +4,8 @@ import agent from "../api/agent";
 import { useNavigate } from "react-router";
 import type { RegisterSchema } from "../schemas/registerSchema";
 import { toast } from "react-toastify";
+import type { ChangePasswordSchema } from "../schemas/changePasswordSchema";
+
 
 export const useAccount = () => {
   const queryClient = useQueryClient();
@@ -69,6 +71,24 @@ export const useAccount = () => {
     enabled: !queryClient.getQueryData(["user"]),
   });
 
+  const changePassword = useMutation({
+    mutationFn: async (data: ChangePasswordSchema) => {
+      await agent.post("/account/change-password", data);
+    },
+  });
+
+  const forgotPassword = useMutation({
+    mutationFn: async (email: string) => {
+      await agent.post("/forgotPassword", { email });
+    },
+  });
+
+  const resetPassword = useMutation({
+    mutationFn: async (data: ResetPassword) => {
+      await agent.post("/resetPassword", data);
+    },
+  });
+
   return {
     loginUser,
     currentUser,
@@ -77,5 +97,8 @@ export const useAccount = () => {
     registerUser,
     vertifyEmail,
     resendConfiramtionEmail,
+    changePassword,
+    resetPassword,
+    forgotPassword,
   };
 };

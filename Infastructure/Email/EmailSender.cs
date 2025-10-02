@@ -54,7 +54,7 @@ public class EmailSender(IResend resend, IConfiguration config) : IEmailSender<U
 
         Console.WriteLine(message.HtmlBody);
 
-        //await resend.EmailSendAsync(message);
-         await Task.CompletedTask;
+        await resend.EmailSendAsync(message);
+         //await Task.CompletedTask;
     }
 }
