@@ -161,6 +161,7 @@ export const useProfile = (id?: string, predicate?: string) => {
       });
     },
   });
+  
 
   const isCurrentUser = useMemo(() => {
     return id === queryClient.getQueryData<User>(["user"])?.id;
