@@ -34,6 +34,7 @@ You can log in with the demo account:
 - ⚡ Real-time updates and chat (SignalR)  
 - 🎨 Modern UI using **Material UI (MUI)**  
 - ☁️ Fully deployed to **Azure**
+- 🔍 Filter activities by date, by all, hosting, or attending
 
 ---
 
@@ -126,13 +127,7 @@ SQL Server will be available at localhost,1433.
 }
 ```
 
-4️⃣ Add EF Core migration:
-
-```bash
-dotnet ef migrations add InitialCreate -p Persistence -s Api
-```
-
-5️⃣ Apply the migration:
+4️⃣  Apply the migration:
 ```bash
 dotnet ef database update -p Persistence -s Api
 ```
