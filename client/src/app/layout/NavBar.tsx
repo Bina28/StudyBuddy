@@ -44,7 +44,7 @@ export default function NavBar() {
                     fontWeight="bold"
                     position="relative"
                   >
-                    StuddyBuddy
+                    StudyBuddy
                   </Typography>
                   <Observer>
                     {() =>

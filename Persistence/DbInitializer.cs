@@ -9,11 +9,13 @@ public class DbInitializer
     public static async Task SeedData(AppDbContext context, UserManager<User> userManager)
     {
         var users = new List<User>
-        {
-        new() {Id="bob-id", DisplayName="Bob", UserName="bob@gmail.com", Email="bob@gmail.com"},
-        new() {Id="tom-id", DisplayName="Tom", UserName="tom@gmail.com", Email="tom@gmail.com"},
-        new() {Id="jane-id", DisplayName="Jane", UserName="jane@gmail.com", Email="jane@gmail.com"}
-        };
+{
+    new() { Id = "bob-id",  DisplayName = "Bob",  UserName = "bob@gmail.com",  Email = "bob@gmail.com" },
+    new() { Id = "tom-id",  DisplayName = "Tom",  UserName = "tom@gmail.com",  Email = "tom@gmail.com" },
+    new() { Id = "jane-id", DisplayName = "Jane", UserName = "jane@gmail.com", Email = "jane@gmail.com" },
+    new() { Id = "albina-id", DisplayName = "Albina Dyakova", UserName = "dyakovabina@gmail.com", Email = "dyakovabina@gmail.com", EmailConfirmed = true }
+};
+
         if (!userManager.Users.Any())
         {
             foreach (var user in users)
